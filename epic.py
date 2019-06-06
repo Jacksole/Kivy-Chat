@@ -1,35 +1,61 @@
+import os
+
 import kivy
 from kivy.app import App
-from kivy.uix.gridlayout import GridLayout  # one of many layout structures
+# to use buttons:
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput  # allow for ...text input.
+from kivy.uix.textinput import TextInput
 
 kivy.require("1.10.1")
-
-# An actual app is likely to consist of many different
-# "pages" or "screens." Inherit from GridLayout
 
 
 class ConnectPage(GridLayout):
     # runs on initialization
     def __init__(self, **kwargs):
-        # we want to run __init__ of both ConnectPage AAAAND GridLayout
         super().__init__(**kwargs)
 
         self.cols = 2  # used for our grid
 
-        # widgets added in order, so mind the order.
+        # Read settings from text file, or use empty strings
+        if os.path.isfile("prev_details.txt"):
+            with open("prev_details.txt", "r") as f:
+                d = f.read().split(",")
+                prev_ip = d[0]
+                prev_port = d[1]
+                prev_username = d[2]
+        else:
+            prev_ip = ''
+            prev_port = ''
+            prev_username = ''
+
         self.add_widget(Label(text='IP:'))  # widget #1, top left
-        self.ip = TextInput(multiline=False)  # defining self.ip...
+        # defining self.ip...
+        self.ip = TextInput(text=prev_ip, multiline=False)
         self.add_widget(self.ip)  # widget #2, top right
 
         self.add_widget(Label(text='Port:'))
-        self.port = TextInput(multiline=False)
+        self.port = TextInput(text=prev_port, multiline=False)
         self.add_widget(self.port)
 
         self.add_widget(Label(text='Username:'))
-        self.username = TextInput(multiline=False)
+        self.username = TextInput(text=prev_username, multiline=False)
         self.add_widget(self.username)
+
+        # add our button.
+        self.join = Button(text="Join")
+        self.join.bind(on_press=self.join_button)
+        self.add_widget(Label())  # just take up the spot.
+        self.add_widget(self.join)
+
+    def join_button(self, instance):
+        port = self.port.text
+        ip = self.ip.text
+        username = self.username.text
+        with open("prev_details.txt", "w") as f:
+            f.write(f"{ip},{port},{username}")
+        print(f"Joining {ip}:{port} as {username}")
 
 
 class EpicApp(App):
