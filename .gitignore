@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#wheel files
+./pywin23-223-cp37-cp37m-win_amd64.whl
