@@ -1,67 +1,17 @@
-import os
+import kivy  # importing main package
+from kivy.app import App  # required base class for your app.
+from kivy.uix.label import Label  # uix element that will hold text
+kivy.require("1.11.0")  # make sure people running py file have right version
 
-import kivy
-from kivy.app import App
-# to use buttons:
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-
-kivy.require("1.10.1")
-
-
-class ConnectPage(GridLayout):
-    # runs on initialization
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.cols = 2  # used for our grid
-
-        # Read settings from text file, or use empty strings
-        if os.path.isfile("prev_details.txt"):
-            with open("prev_details.txt", "r") as f:
-                d = f.read().split(",")
-                prev_ip = d[0]
-                prev_port = d[1]
-                prev_username = d[2]
-        else:
-            prev_ip = ''
-            prev_port = ''
-            prev_username = ''
-
-        self.add_widget(Label(text='IP:'))  # widget #1, top left
-        # defining self.ip...
-        self.ip = TextInput(text=prev_ip, multiline=False)
-        self.add_widget(self.ip)  # widget #2, top right
-
-        self.add_widget(Label(text='Port:'))
-        self.port = TextInput(text=prev_port, multiline=False)
-        self.add_widget(self.port)
-
-        self.add_widget(Label(text='Username:'))
-        self.username = TextInput(text=prev_username, multiline=False)
-        self.add_widget(self.username)
-
-        # add our button.
-        self.join = Button(text="Join")
-        self.join.bind(on_press=self.join_button)
-        self.add_widget(Label())  # just take up the spot.
-        self.add_widget(self.join)
-
-    def join_button(self, instance):
-        port = self.port.text
-        ip = self.ip.text
-        username = self.username.text
-        with open("prev_details.txt", "w") as f:
-            f.write(f"{ip},{port},{username}")
-        print(f"Joining {ip}:{port} as {username}")
-
-
+# Our simple app. NameApp  convention matters here. Kivy
+# uses some magic here, so make sure you leave the App bit in there!
 class EpicApp(App):
+    # This is your "initialize" for the root wiget
     def build(self):
-        return ConnectPage()
+        # Creates that label which will just hold text.
+        return Label(text="Hey there!")
 
 
+# Run the app.
 if __name__ == "__main__":
     EpicApp().run()

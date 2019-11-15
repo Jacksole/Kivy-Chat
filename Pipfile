@@ -9,10 +9,11 @@ verify_ssl = true
 docutils = "*"
 pygments = "*"
 pypiwin32 = "*"
-kivy-deps-sdl2 = "*"
-kivy-deps-angle = "*"
-kivy = "==1.10.1"
-kivy-deps-glew = "*"
+pillow = "*"
+kivy-deps-sdl2 = "==0.1.22"
+kivy-deps-angle = "==0.1.9"
+kivy = "==1.11.1"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.7"
